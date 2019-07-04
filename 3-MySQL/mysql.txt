@@ -1,0 +1,21 @@
+
+Написать ОДИН запрос, который сразу выведет таблицу со всеми
+необходимыми данными:
+
+Название категории
+Количество товаров в категории
+Минимальная цена на товар в категории
+Максимальная цена на товар в категории
+Название товара с наиболее длинным описанием в категории
+Наибольшая длина описания в категории
+Текст самого длинного описания в категории
+______________________________________________________________
+Текст запроса:
+______________________________________________________________
+
+SELECT tb3.category, tb3.product_amount, tb3.min_price, tb3.max_price, tb4.name, tb3.max_description_length,  tb4.description
+FROM admin_test.products AS tb4
+RIGHT JOIN
+(SELECT tb1.id, tb1.name AS category, COUNT(*) AS product_amount, MIN(tb2.price) AS min_price, MAX(tb2.price) AS max_price, MAX(CHAR_LENGTH(tb2.description)) AS max_description_length, tb2.name, tb2.description FROM admin_test.categories AS tb1 JOIN admin_test.products AS tb2 ON tb2.category_id = tb1.id GROUP BY tb1.name)
+AS tb3 ON tb4.category_id = tb3.id AND CHAR_LENGTH(tb4.description) = tb3.max_description_length
+
